@@ -1,0 +1,357 @@
+#+CATEGORY: orgmode, org-mode, org, web, ssg, npm
+#+TAGS: 
+#+DESCRIPTION: Comunicación para el congreso de Periodisimo, mujer y comunicación
+#+TITLE: Hexo, un SSG que soporta org-mode
+#+DATE: <2017-12-03 dom>
+#+AUTHOR: Adolfo Antón Bravo
+#+EMAIL: adolflow@infotics.es
+#+OPTIONS: todo:nil pri:nil tags:nil ^:nil  toc:nil
+
+
+[[https://www.npmjs.com/package/hexo][Hexo]] es un sistema para blogs en [[https://www.nodejs.org][node.js]], al estilo de los /SSG/ (/Static Site Generator/  o generador de
+contenidos estáticos), siguiendo la filosofía del /Content as Code/  o /contenido como código/.
+
+He probado Jekyll, que sigue teniendo, de momento, el blog de
+[[https://blog.infotics.es][infotics.es]], y [[http://octopress.org/][Octopress]] (Ruby); [[https://blog.getpelican.com/][Pelican]] y [[https://getnikola.com/][Nikola]] (Python); Hugo (go)... No puedo dudar de las ventajas de
+cada cual ni de las distintas maneras de hacer que podamos trabajar con archivos org-mode y los exportemos
+directamente en nuestro SSG preferido.
+
+* Instalación
+Lo instalamos con
+
+#+BEGIN_EXAMPLE bash
+npm install hexo-cli -g
+#+END_EXAMPLE
+
+* Crear un blog
+Para empezar, creamos un blog:
+
+#+BEGIN_EXAMPLE
+hexo init blog
+#+END_EXAMPLE
+
+Si nos vamos al blog:
+
+#+BEGIN_EXAMPLE
+cd blog
+#+END_EXAMPLE
+
+* Servidor
+Podemos iniciar el servidor:
+
+#+BEGIN_EXAMPLE bash
+hexo server
+#+END_EXAMPLE
+
+Y podemos empezar con una publicación nueva que se titule "Mis comienzos con Hexo":
+
+#+BEGIN_EXAMPLE
+hexo new "Mis comienzos con Hexo"
+#+END_EXAMPLE
+
+** Generar el código
+
+Una vez que vemos que funciona, podemos generar los contenidos estáticos con =hexo generate=
+
+#+BEGIN_EXAMPLE
+hexo generate
+#+END_EXAMPLE
+** Borradores
+Hay una carpeta donde se almacenan los borradores, artículos que todavía no se han publicado.
+
+Si queremos ver el blog con los borradores, podemos hacerlo con la opción =--draft=. 
+#+BEGIN_SRC shell
+hexo server --draft --open
+
+#+END_SRC
+* Hexo-renderer-org
+
+*[[https://github.com/CodeFalling/hexo-renderer-org][hexo-renderer-org]]* es un plugin para renderizar sintaxis *org-mode* en *Emacs*.
+
+Para instalarlo, ve a tu directorio donde está el blog con *nexo* desde la consola:
+
+#+BEGIN_EXAMPLE
+cd ruta/blog/nexo
+#+END_EXAMPLE
+
+Entonces:
+
+#+BEGIN_EXAMPLE
+npm install hexo-renderer-org --save
+#+END_EXAMPLE
+
+Reinicia el servidor, parándolo y volviéndolo a arrancar y listo.
+
+** Opciones
+
+Se puede configurar el plugin en =_config.yml=
+
+#+BEGIN_EXAMPLE
+org:
+  toc: false
+#+END_EXAMPLE
+
+Con la opción =toc= habilitamos la tabla de contenidos.
+
+** Nueva publicación
+
+Para crear una nueva publicación, vamos al directorio =source/_posts/= y escribimos nuestra archivo de texto orgmode.
+
+Podemos utilizar cabeceras *LaTeX* o *YAML*
+
+*** LaTeX
+
+#+BEGIN_EXAMPLE
+#+TITLE: Hola, Mundo Hexo
+#+DATE: <2017-12-01>
+#+TAGS: emacs, orgmode, hexo
+#+LAYOUT: post
+#+CATEGORIES: orgmode
+#+COMMENTS	yes/no
+#+END_EXAMPLE
+
+*** YAML
+
+#+BEGIN_EXAMPLE
+title: Hola, Mundo Hexo
+date: 2017-12-01 19:25:01
+tags:
+- emacs
+- hexo
+---
+
+#+END_EXAMPLE
+
+** Leer más
+
+Si queremos que aparezca un =Leer más=, hemos de insertar:
+
+#+BEGIN_SRC org
+#+HTML: <!-- more -->
+
+#+END_SRC
+
+** caption, alt y title de imagen
+¿Cómo  poner un =caption= de una imagen? Hexo utiliza el atributo =alt= como =title=.
+
+#+BEGIN_EXAMPLE
+#+ATTR_HTML:  :alt caption
+[[image url]]
+#+END_EXAMPLE
+
+
+** Número de línea
+
+Si queremos que aparezca el número de línea, añadimos en =_config.yml=:
+
+#+BEGIN_EXAMPLE
+highlight:
+  enable: true
+  number: false
+#+END_EXAMPLE
+
+** Opciones
+
+Podemos añadir vía =_config.yml= opciones generales para los artículos.
+
+Por ejemplo, si no queremos habilitar el número de elemento del esquema en todos los artículos, pondremos:
+
+#+BEGIN_EXAMPLE
+org:
+  common: |
+          #+OPTIONS: num: nil
+
+#+END_EXAMPLE
+
+Si quisiéramos en una publicación habilitarlo, pondríamos en su cabecera:
+
+#+BEGIN_EXAMPLE
+#+OPTIONS:  num: 2
+#+END_EXAMPLE
+
+** Categorías
+En los metadatos modo =org-mode=, hay que poner las categorías en la línea de ~#+CATEGORIES:~
+ en vez de en ~#+CATEGORY:~, como teníamos normalmente.
+
+Cuando ponemos varias categorías:
+
+#+BEGIN_EXAMPLE
+#+CATEGORIES: github, refugees, project, proyecto, datawrapper, dataviz
+#+END_EXAMPLE
+
+Hexo las anida, como si tuvieran jerarquía de izqda. a dcha. Parece ser que [[https://stackoverflow.com/questions/46194621/grouping-categories-in-hexo][Hexo v3.3.9 viene con la opción de
+jerarquía en las categorías]], por lo que hay que ponerlas en línea si no queremos anidarlas:
+
+#+BEGIN_SRC org
+#+CATEGORIES: análisis electorales
+#+CATEGORIES: data
+
+#+END_SRC
+
+O en =yaml=:
+
+#+BEGIN_SRC yml
+categories:
+- [data, science]
+- [data, visualization]
+- [data, journalism]
+
+#+END_SRC
+
+* hexo-generator-calendar
+El paquete [[https://www.npmjs.com/package/hexo-generator-calendar?notice=jIf-BrmMdBL0dE9xt5KutzixRQNjTstiiEein2m3][hexo-generator-calendar]] se basa en un [[https://github.com/howiefh/hexo-generator-calendar][calendario]] para el tema [[https://github.com/howiefh/hexo-theme-landscape-f][Landscape-F]]. 
+
+Para instalarlo:
+
+#+BEGIN_EXAMPLE
+npm install --save hexo-generator-calendar
+#+END_EXAMPLE
+
+Genera datos de calendario en formato =json= de =site.posts= y crea un calendario con =vanilla js= sin
+=jquery=, lo que hacen de este plugin muy ligero.
+
+No se necesita ninguna configuración, sólo hay que añadir este código a la plantilla deseada:
+
+#+BEGIN_EXAMPLE
+<div id="calendar_wrap" time="2016-07-10">
+</div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '/js/pikaday.js';
+    s.async= true;
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+#+END_EXAMPLE
+
+* Instalar otro tema
+
+** Beautiful-hexo
+Un tema sencillo, [[https://github.com/twoyao/beautiful-hexo][beautiful-hexo]]
+
+Lo instalamos tal como nos piden en su github con algunas extensiones: =hexo-generator-archive=,
+=hexo-renderer-jade=, =hexo-generator-tag=, =hexo-generator-feed=, =hexo-generator-sitemap= y =hexo-browsersync= (lugo
+veremos este último).
+
+#+BEGIN_SRC shell
+npm install --save hexo-generator-archive hexo-renderer-jade hexo-generator-tag hexo-generator-feed hexo-generator-sitemap hexo-browsersync 
+git clone --depth 1 https://github.com/twoyao/beautiful-hexo.git themes/beautiful-hexo
+
+
+#+END_SRC
+
+** Phantom
+El tema [[https://github.com/klugjo/hexo-theme-phantom][phantom]] es una implementación de la plantilla del mismo nombre de [[http://html5up.net/phantom][html5up.net]].
+
+Está orientado al portafolio de diseño o fotografía, plenamente responsive. Por su aspecto atrae también a
+otros sectores:
+
+*** Características
+- Comentarios de Disqus and Facebook
+- Google Analytics
+- Imagen de cabecera para artículos y páginas.
+- Soporte para etiquetas.
+- Imágenes responsive.
+- Galería de imágenes.
+- Configuración de cuentas de redes sociales.
+- Paginación.
+
+No soporta:
+- No se muestran las categorías del artículo.
+- No se muestran las fechas de publicación de los artículos o las páginas.
+
+*** Librerías que usa
+- [[http://noelboss.github.io/featherlight/][FeatherLight.js]] (Gallery)
+- [[https://jquery.com/][jQuery]]
+- [[https://github.com/n33/skel][Skel]]
+
+*** Extensiones requeridas
+
+Necesita soporte para SCSS, por lo que hay que instalar =hexo-renderer-scss=:
+
+#+BEGIN_EXAMPLE
+npm install --save hexo-renderer-scss
+#+END_EXAMPLE
+
+*** Instalación
+
+Sobre el directorio del blog de hexo, hacemos un clon del tema sobre la carpeta =themes:=
+#+BEGIN_SRC shell
+git clone --depth 1 https://github.com/klugjo/hexo-theme-pnantom.git themes/phantom
+
+#+END_SRC
+
+** Bootstrap-blog
+El tema [[https://github.com/cgmartin/hexo-theme-bootstrap-blog][Bootstrap-blog]] está basado en el tema de Hexo [[https://github.com/hexojs/hexo-theme-landscape][Landscape]] y en [[http://getbootstrap.com/examples/blog/][la plantilla de Bootstrap]].
+
+Lo instalamos con:
+
+#+BEGIN_SRC shell
+git clone --depth 1 https://github.com/cgmartin/hexo-theme-bootstrap-blog.git themes/bootstrap-blog
+#+END_SRC
+
+Si queremos más etiquetas de Bootstrap, instalamos además =hexo-tag-bootstrap=.
+
+#+BEGIN_SRC shell
+npm install hexo-tag-bootstrap --save
+#+END_SRC
+
+Y también podríamos instalar =hexo-tag-fontawesome=
+ para usarlo con Markdown (veamos si podemos usarlo con Org-mode).
+
+#+BEGIN_SRC shell
+npm install hexo-tag-fontawesome --save
+
+#+END_SRC
+
+* Refresco
+Para no refrescar manualmente el navegador cada vez que hay algún cambio, =hexo-livereload=  o =hexo-browsersync=
+pueden ayudarnos.
+
+Para instalar =hexo-browsersync=:
+
+#+BEGIN_EXAMPLE
+npm install hexo-browsersync --save
+#+END_EXAMPLE
+
+No hay que añadir nada a nuestro archivo de configuración, pero algunas [[http://www.browsersync.io/docs/options/][opciones]] son:
+
+#+BEGIN_EXAMPLE
+browsersync:
+  logLevel: "warn"
+  ghostMode:
+    scroll: true
+#+END_EXAMPLE
+* Ayuda
+#+BEGIN_EXAMPLE
+$ hexo
+Usage: hexo <command>
+
+Commands:
+  clean     Removed generated files and cache.
+  config    Get or set configurations.
+  deploy    Deploy your website.
+  generate  Generate static files.
+  help      Get help on a command.
+  init      Create a new Hexo folder.
+  list      List the information of the site
+  migrate   Migrate your site from other system to Hexo.
+  new       Create a new post.
+  publish   Moves a draft post from _drafts to _posts folder.
+  render    Render files with renderer plugins.
+  server    Start the server.
+  version   Display version information.
+  ...
+#+END_EXAMPLE
+
+Para saber la ayuda de cualquier comando, ~help {command]}~:
+
+#+BEGIN_SRC shell
+hexo help server
+#+END_SRC
+* Blogs con Hexo
+
+- https://blog.bitbadger.solutions/
+- https://ziyuanjun.github.io/
+- http://mengxianjun.org/
