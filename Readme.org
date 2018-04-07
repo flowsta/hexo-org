@@ -68,10 +68,10 @@ hexo server --draft --open
 
 *[[https://github.com/CodeFalling/hexo-renderer-org][hexo-renderer-org]]* es un plugin para renderizar sintaxis *org-mode* en *Emacs*.
 
-Para instalarlo, ve a tu directorio donde está el blog con *nexo* desde la consola:
+Para instalarlo, ve a tu directorio donde está el blog con *hexo* desde la consola:
 
 #+BEGIN_EXAMPLE
-cd ruta/blog/nexo
+cd ruta/blog/hexo
 #+END_EXAMPLE
 
 Entonces:
@@ -91,7 +91,8 @@ org:
   toc: false
 #+END_EXAMPLE
 
-Con la opción =toc= habilitamos la tabla de contenidos.
+Con la opción =toc= habilitamos con el valor =true= la /table of contents/ (tabla de contenidos, el índice), y con
+ el valor =false= lo inhabilitamos.
 
 ** Nueva publicación
 
@@ -180,9 +181,13 @@ Cuando ponemos varias categorías:
 #+END_EXAMPLE
 
 Hexo las anida, como si tuvieran jerarquía de izqda. a dcha. Parece ser que [[https://stackoverflow.com/questions/46194621/grouping-categories-in-hexo][Hexo v3.3.9 viene con la opción de
-jerarquía en las categorías]], por lo que hay que ponerlas en línea si no queremos anidarlas:
+jerarquía en las categorías]], por lo que hay que ponerlas en línea si no queremos anidarlas o en la misma línea
+con anidación:
 
 #+BEGIN_SRC org
+#+CATEGORIES: data, Science
+#+CATEGORIES: data, visualization
+#+CATEGORIES: data, journalism
 #+CATEGORIES: análisis electorales
 #+CATEGORIES: data
 
@@ -226,6 +231,23 @@ No se necesita ninguna configuración, sólo hay que añadir este código a la p
 #+END_EXAMPLE
 
 * Instalar otro tema
+Para instalar otro tema, podemos echar un vistazo a la página de [[https://hexo.io/themes][temas de Hexo]]. Normalmente los temas enlazan
+con su repositorio de github, y todos ellos suelen poner en las instrucciones de instalación que clonemos el
+repositorio en la carpeta de los temas del blog hexo que estamos utilizando:
+
+#+BEGIN_EXAMPLE
+git clone https://github.com/nombre-tema-hexo.git themes/nombre-tema-hexo
+#+END_EXAMPLE
+
+Hacerlo así está bien, es correcto, pero también es verdad que si no vamos a /commitear/ sobre este tema, no nos
+interesa descargarnos todo el repositorio de git. Por tanto, podemos utilizar la opción de =git= =--depth 1= ,
+donde =--depth= indica qué profundidad quieres traerte del repositorio y con =1= [[https://stackoverflow.com/questions/6941889/is-it-safe-to-shallow-clone-with-depth-1-create-commits-and-pull-updates-aga][realizamos un clonado
+superficial]]. Por tanto:
+
+#+BEGIN_EXAMPLE
+git clone --depth 1 https://github.com/nombre-tema-hexo.git themes/nombre-tema-hexo
+#+END_EXAMPLE
+
 
 ** Beautiful-hexo
 Un tema sencillo, [[https://github.com/twoyao/beautiful-hexo][beautiful-hexo]]
@@ -240,6 +262,8 @@ git clone --depth 1 https://github.com/twoyao/beautiful-hexo.git themes/beautifu
 
 
 #+END_SRC
+
+
 
 ** Phantom
 El tema [[https://github.com/klugjo/hexo-theme-phantom][phantom]] es una implementación de la plantilla del mismo nombre de [[http://html5up.net/phantom][html5up.net]].
